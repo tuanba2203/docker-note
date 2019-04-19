@@ -1,0 +1,14 @@
+FROM centos
+
+# Install logstash 6.x and aws-rs plugin
+RUN rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+RUN echo "[logstash-6.x]"                                               >  /etc/yum.repos.d/logstash.repo && \
+    echo "name=Elastic repository for 6.x packages"                     >> /etc/yum.repos.d/logstash.repo && \
+    echo "baseurl=https://artifacts.elastic.co/packages/6.x/yum"        >> /etc/yum.repos.d/logstash.repo && \
+    echo "gpgcheck=1"                                                   >> /etc/yum.repos.d/logstash.repo && \
+    echo "gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch"    >> /etc/yum.repos.d/logstash.repo && \
+    echo "enabled=1"                                                    >> /etc/yum.repos.d/logstash.repo && \
+    echo "autorefresh=1"                                                >> /etc/yum.repos.d/logstash.repo && \
+    echo "type=rpm-md"                                                  >> /etc/yum.repos.d/logstash.repo
+RUN yum install -y logstash
+RUN /usr/share/logstash/bin/logstash-plugin install logstash-output-amazon_es
